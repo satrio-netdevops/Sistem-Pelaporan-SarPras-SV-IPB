@@ -1,0 +1,223 @@
+:root {
+    --primary: #B0DB9C;
+    --primary-dark: #8AB973;
+    --secondary: #ECFAE5;
+    --glass: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --text-dark: #1e293b;
+    --bs-success: #198754; /* Bootstrap default success color ref */
+}
+
+/* --- GLOBAL & RESET --- */
+html {
+    height: 100%;
+}
+
+body { 
+    font-family: 'Outfit', sans-serif; 
+    overflow-x: hidden; 
+    background-color: #f8fafc;
+    /* Sisiguraduhin nitong walang default margin ang browser */
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* --- ANIMATED BACKGROUND --- */
+.hero-wrapper {
+    position: relative;
+    /* Tinanggal ang fixed min-height dito para mag-adjust base sa content */
+    padding-bottom: 50px; 
+    background: radial-gradient(circle at top left, #ECFAE5 0%, transparent 40%),
+                radial-gradient(circle at bottom right, #DDF6D2 0%, transparent 40%);
+    overflow: hidden;
+}
+
+/* Floating Blobs */
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.6;
+    z-index: 0;
+    animation: float 10s infinite ease-in-out;
+}
+.blob-1 { width: 400px; height: 400px; background: #B0DB9C; top: -100px; right: -100px; }
+.blob-2 { width: 300px; height: 300px; background: #DDF6D2; bottom: 0; left: -50px; animation-delay: 2s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(20px) scale(1.05); }
+}
+
+/* --- GLASS NAVBAR --- */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 1rem 0;
+}
+
+.nav-link {
+    font-weight: 600;
+    color: #475569 !important;
+    transition: all 0.3s;
+    position: relative;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary-dark);
+    transition: width 0.3s;
+}
+.nav-link:hover::after { width: 100%; }
+.nav-link:hover { color: var(--primary-dark) !important; }
+
+/* --- HERO SECTION --- */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding-top: 150px; /* Adjusted for fixed navbar */
+    padding-bottom: 60px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #1e293b 0%, #8AB973 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-img-container {
+    position: relative;
+    animation: floatImg 6s ease-in-out infinite;
+}
+@keyframes floatImg {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+/* --- BUTTONS --- */
+.btn-glow {
+    background: linear-gradient(135deg, #B0DB9C 0%, #8AB973 100%);
+    color: white;
+    border: none;
+    padding: 14px 35px;
+    border-radius: 50px;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(176, 219, 156, 0.4);
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+.btn-glow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(176, 219, 156, 0.6);
+    color: white;
+}
+
+.btn-outline-modern {
+    background: white;
+    color: #475569;
+    border: 2px solid #e2e8f0;
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: 700;
+    transition: all 0.3s;
+}
+.btn-outline-modern:hover {
+    border-color: var(--primary);
+    color: var(--primary-dark);
+    background: #f8fafc;
+}
+
+/* --- FEATURES (Glass Cards) --- */
+.glass-card {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 5px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.glass-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+}
+.glass-card:hover::before { opacity: 1; }
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s;
+}
+.glass-card:hover .feature-icon { transform: scale(1.1) rotate(5deg); }
+
+/* --- FOOTER --- */
+footer {
+    background: white;
+    border-top: 1px solid #f1f5f9;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+}
+
+/* Footer Hover Links Effect */
+.hover-link {
+    color: #6c757d; /* Text Muted default */
+    transition: all 0.2s ease-in-out;
+}
+
+.hover-link:hover {
+    color: var(--bs-success) !important; /* Green color on hover */
+    text-decoration: underline !important;
+    padding-left: 5px; /* Slight movement to right */
+}
+
+/* --- TECH STACK SECTION --- */
+.tech-stack-container {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.tech-icon {
+    font-size: 2rem;
+    color: #64748b; 
+    opacity: 0.6;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: help; 
+}
+
+.tech-icon:hover {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.1);
+}
+
+.tech-icon.laravel:hover { color: #FF2D20; filter: drop-shadow(0 5px 15px rgba(255, 45, 32, 0.3)); }
+.tech-icon.php:hover { color: #777BB4; filter: drop-shadow(0 5px 15px rgba(119, 123, 180, 0.3)); }
+.tech-icon.bootstrap:hover { color: #7952B3; filter: drop-shadow(0 5px 15px rgba(121, 82, 179, 0.3)); }
+.tech-icon.mysql:hover { color: #4479A1; filter: drop-shadow(0 5px 15px rgba(68, 121, 161, 0.3)); }
+.tech-icon.js:hover { color: #F7DF1E; filter: drop-shadow(0 5px 15px rgba(247, 223, 30, 0.3)); }
