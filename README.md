@@ -49,7 +49,7 @@ php artisan key:generate
 php artisan migrate:fresh --seed
 ```
 
-_(Ang `--seed` ay gagawa ng default Admin: `admin@example.com` / `password`)_.
+_(password default Admin: `admin@example.com` / `password`)_.
 
 **Step 5: Link Storage**
 Mahalaga ito para lumabas ang images.
