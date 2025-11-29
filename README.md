@@ -8,8 +8,6 @@ Fitur utama termasuk **Laporan Real-time**, **Manajemen Aset**, **Permintaan Per
 
 ## **1. Technical Stack**
 
-Ang system ay binuo gamit ang mga sumusunod na teknolohiya base sa requirements:
-
 -   **Framework:** Laravel 12 (PHP 8.2)
 -   **Database:** MySQL (LAMP)
 -   **Frontend:** Bootstrap 5 (Sass/SCSS) + Vite
@@ -19,8 +17,6 @@ Ang system ay binuo gamit ang mga sumusunod na teknolohiya base sa requirements:
 
 
 ## **2. Installation Guide (How to Run)**
-
-Kung ililipat sa ibang computer o ide-deploy, sundin ito:
 
 **Step 1: Prerequisites**
 
@@ -52,7 +48,6 @@ php artisan migrate:fresh --seed
 _(password default Admin: `admin@example.com` / `password`)_.
 
 **Step 5: Link Storage**
-Mahalaga ito para lumabas ang images.
 
 ```bash
 php artisan storage:link
@@ -63,4 +58,4 @@ Buka terminal untuk menjalankan backend dan (opsional) frontend:
 php artisan serve
 npm run dev
 ```
-```
+
