@@ -120,6 +120,7 @@
                         <select name="type" class="form-select mb-3" required>
                             <option value="damage">Rusak</option>
                             <option value="borrow">Peminjaman</option>
+                            <option value="returned">Dikembalikan</option>
                             <option value="other">Lainnya</option>
                         </select>
 
