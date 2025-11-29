@@ -14,7 +14,7 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'product_id' => 'nullable|exists:products,id',
+            'product_id' => 'required|exists:products,id',
             'type' => 'required|string|in:rusak,peminjaman,pengembalian,other',
             'quantity' => 'nullable|integer|min:0',
             'notes' => 'nullable|string|max:1000',

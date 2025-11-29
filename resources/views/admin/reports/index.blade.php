@@ -14,6 +14,7 @@
                             <th>Produk</th>
                             <th>Tipe</th>
                             <th>Qty</th>
+                            <th>Deskripsi</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -23,9 +24,10 @@
                             <tr>
                                 <td>{{ $report->created_at->format('Y-m-d H:i') }}</td>
                                 <td>{{ $report->user->name }}</td>
-                                <td>{{ $report->product?->name ?? '-' }}</td>
+                                <td>{{ $report->product->name ?? '-' }}</td>
                                 <td>{{ ucfirst($report->type) }}</td>
                                 <td>{{ $report->quantity }}</td>
+                                <td>{{ $report->notes ?? '-' }}</td>
                                 <td>
                                     @if($report->status === 'pending')
                                         <span class="badge bg-warning">Pending</span>
