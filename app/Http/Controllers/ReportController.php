@@ -2,142 +2,144 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Report;
-use App\Models\Product;
 use App\Models\ActivityLog;
+use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ReportController extends Controller
 {
-    // Store a new report (user)
+    // 1. MENAMPILKAN DAFTAR LAPORAN (INDEX)
+    public function index()
+    {
+        // LOGIKA ADMIN: Arahkan ke folder admin/reports
+        if (Auth::user()->role === 'admin') {
+            $reports = Report::with('user')->latest()->paginate(20);
+            return view('admin.reports.index', compact('reports'));
+        }
+
+        // LOGIKA STAFF: Arahkan ke folder staff/reports (Lihat history sendiri)
+        $reports = Report::where('user_id', Auth::id())->latest()->paginate(10);
+        return view('staff.reports.index', compact('reports'));
+    }
+
+    // 2. MENAMPILKAN FORMULIR (CREATE)
+    public function create()
+    {
+        // PENTING: Folder 'products' sudah kamu rename jadi 'reports' di Tahap 1
+        return view('staff.reports.create');
+    }
+
+    // 3. MENYIMPAN DATA (STORE)
     public function store(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'type' => 'required|string|in:rusak,peminjaman,pengembalian,lainnya',
-            'quantity' => 'nullable|integer|min:0',
-            'notes' => 'nullable|string|max:1000',
+            'asset_type' => 'required',
+            'report_type' => 'required',
+            'object_name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'description' => 'required|string',
+            'photo' => 'nullable|image|max:10240',
         ]);
 
-        $report = Report::create([
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('reports', 'public');
+        }
+
+        Report::create([
             'user_id' => Auth::id(),
-            'product_id' => $request->product_id,
-            'type' => $request->type,
-            'quantity' => $request->quantity ?? 0,
-            'notes' => $request->notes,
+            'asset_type' => $request->asset_type,
+            'report_type' => $request->report_type,
+            'object_name' => $request->object_name,
+            'location' => $request->location,
+            'quantity' => 1,
+            'description' => $request->description,
+            'photo_path' => $photoPath,
             'status' => 'pending'
         ]);
 
         ActivityLog::create([
             'user_id' => Auth::id(),
-            'action' => 'Submitted Report',
-            'details' => "Submitted report ({$report->type}) for product_id: {$report->product_id}"
+            'action' => 'Buat Laporan',
+            'details' => Auth::user()->name . " melaporkan " . $request->report_type . " pada " . $request->object_name . " di " . $request->location
         ]);
 
-        return back()->with('success', 'Laporan berhasil dikirim.');
+        // Setelah lapor, kembalikan ke Dashboard (List Laporan Saya)
+        return redirect()->route('dashboard')->with('success', 'Laporan berhasil dikirim!');
     }
 
-    // Admin: list reports
-    public function index()
-    {
-        $reports = Report::with(['user', 'product'])->latest()->paginate(20);
-        return view('admin.reports.index', compact('reports'));
-    }
+    // 4. LOGIKA APPROVAL (ADMIN)
 
-    // Admin: approve report
-    public function approve($id)
+   public function reject($id)
     {
         $report = Report::findOrFail($id);
-
-        if ($report->status !== 'pending') {
-            return back()->with('info', 'Laporan sudah diproses.');
-        }
-
-        // Example: for damage or borrow, decrement stock by quantity when approving
-        if (in_array($report->type, ['rusak','peminjaman','pengembalian']) && $report->product_id && $report->quantity > 0) {
-            $product = Product::find($report->product_id);
-            if ($product && $product->quantity >= $report->quantity) {
-                $product->decrement('quantity', $report->quantity);
-            }
-        }
-
-        $report->update(['status' => 'approved']);
-
-        ActivityLog::create([
-            'user_id' => Auth::id(),
-            'action' => 'Approved Report',
-            'details' => "Approved report {$report->id} ({$report->type})"
-        ]);
-
-        return back()->with('success', 'Laporan disetujui.');
-    }
-
-    // Admin: reject report
-    public function reject($id)
-    {
-        $report = Report::findOrFail($id);
-
-        if ($report->status !== 'pending') {
-            return back()->with('info', 'Laporan sudah diproses.');
-        }
-
         $report->update(['status' => 'rejected']);
 
+        // LOG LEBIH DETAIL
         ActivityLog::create([
             'user_id' => Auth::id(),
-            'action' => 'Rejected Report',
-            'details' => "Rejected report {$report->id} ({$report->type})"
+            'action' => 'Tolak Laporan',
+            'details' => "Admin menolak laporan: " . $report->object_name . " (Pelapor: " . $report->user->name . ")"
         ]);
 
         return back()->with('success', 'Laporan ditolak.');
     }
 
-    // Delete report (user can delete their own pending reports, admin can delete any)
+    // Admin: Verifikasi Laporan (Status: Pending -> Approved/Proses)
+   public function approve($id)
+    {
+        $report = Report::findOrFail($id);
+        $report->update(['status' => 'approved']);
+
+        // LOG LEBIH DETAIL
+        ActivityLog::create([
+            'user_id' => Auth::id(), // ID Admin yang melakukan aksi
+            'action' => 'Verifikasi Laporan',
+            // Kita tambahkan info pelapornya
+            'details' => "Admin memverifikasi laporan: " . $report->object_name . " (Pelapor: " . $report->user->name . ")"
+        ]);
+
+        return back()->with('success', 'Laporan diverifikasi. Status: Sedang Diproses.');
+    }
+
+    // Admin: Selesaikan Laporan (Status: Approved -> Completed)
+    public function complete($id)
+    {
+        $report = Report::findOrFail($id);
+        $report->update(['status' => 'completed']);
+
+        // LOG LEBIH DETAIL
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'Selesaikan Laporan',
+            'details' => "Admin menyelesaikan laporan: " . $report->object_name . " (Pelapor: " . $report->user->name . ")"
+        ]);
+
+        return back()->with('success', 'Laporan telah diselesaikan.');
+    }
+
+    // 5. HAPUS LAPORAN
     public function destroy($id)
     {
         $report = Report::findOrFail($id);
 
-        // // Check if user can delete this report
-        // if (Auth::user()->role !== 'admin' && $report->user_id !== Auth::id()) {
-        //     return back()->with('error', 'Anda tidak memiliki izin untuk menghapus laporan ini.');
-        // }
-
-        // // Only allow deletion of pending reports for non-admin users
-        // if (Auth::user()->role !== 'admin' && $report->status !== 'pending') {
-        //     return back()->with('error', 'Laporan yang sudah diproses tidak dapat dihapus.');
-        // }
-
-        $report->delete();
-
+        // LOG DULU SEBELUM HAPUS
         ActivityLog::create([
             'user_id' => Auth::id(),
-            'action' => 'Deleted Report',
-            'details' => "Deleted report {$id} ({$report->type})"
+            'action' => 'Hapus Laporan',
+            'details' => "Admin menghapus laporan: " . $report->object_name . " " . $report->location . " (Milik: " . $report->user->name . ")"
         ]);
 
-        return back()->with('success', 'Laporan berhasil dihapus.');
+        // Hapus foto jika ada
+        if ($report->photo_path) {
+            Storage::disk('public')->delete($report->photo_path);
+        }
+
+        // Baru hapus data
+        $report->delete();
+        
+        return back()->with('success', 'Laporan dihapus.');
     }
-
-    // Export inventory PDF (keperluan admin) — digabungkan disini
-    public function exportInventory()
-    {
-        // 1. Kunin lahat ng products kasama ang Category
-        $products = Product::with('category')->orderBy('name')->get();
-
-        // 2. Calculate Total Inventory Value (Price * Quantity ng bawat item)
-        $totalValue = $products->sum(function ($product) {
-            return $product->price * $product->quantity;
-        });
-
-        // 3. Kunin ang Date ngayon
-        $date = now()->format('F d, Y');
-
-        // 4. I-load ang view at ipasa ang data
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.reports.inventory_pdf', compact('products', 'totalValue', 'date'));
-
-        // 5. I-download ang PDF (inventory-report.pdf)
-        return $pdf->download('inventory-report-'.now()->format('Y-m-d').'.pdf');
-    }
-
 }

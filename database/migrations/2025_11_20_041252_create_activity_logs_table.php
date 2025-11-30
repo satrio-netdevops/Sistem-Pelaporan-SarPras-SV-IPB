@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             
             $table->string('action');  // e.g. "Created Product"
-            $table->string('details'); // e.g. "Added: Wireless Mouse"
+            $table->text('details')->nullable(); // e.g. "Added: Wireless Mouse"
             
             $table->timestamps(); // Created_at (Kailan nangyari)
         });

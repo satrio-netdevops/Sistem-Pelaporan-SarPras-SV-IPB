@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Auth\Events\Lockout;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -24,10 +25,10 @@ class LoginRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+   public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'username' => ['required', 'string'], // Kita validasi input 'username'
             'password' => ['required', 'string'],
         ];
     }
@@ -38,19 +39,40 @@ class LoginRequest extends FormRequest
      * @throws \Illuminate\Validation\ValidationException
      */
     public function authenticate(): void
-    {
-        $this->ensureIsNotRateLimited();
+{
+    $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+    // 1. Ambil apa yang diketik user
+    $input = $this->input('username');
 
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
-        }
+    // 2. LOGIKA PENCARIAN EMAIL
+    // Cek: Apakah user mengetik format email lengkap (ada @ dan titik)?
+    if (filter_var($input, FILTER_VALIDATE_EMAIL)) {
+        // Jika ya, gunakan langsung sebagai email
+        $emailCredential = $input;
+    } else {
+        // Jika tidak (cuma mengetik 'satrio'), cari di database
+        // Query: Cari user yang email-nya DIMULAI DENGAN teks tersebut
+        $user = User::where('email', 'LIKE', $input . '@%')->first();
 
-        RateLimiter::clear($this->throttleKey());
+        // Jika ketemu user-nya, ambil email aslinya.
+        // Jika tidak ketemu, biarkan input mentah (nanti akan gagal di Auth::attempt)
+        $emailCredential = $user ? $user->email : $input;
     }
+
+    // 3. PROSES LOGIN
+    // Kita memasukkan 'email' yang sudah ditemukan tadi ke Auth::attempt
+    if (! Auth::attempt(['email' => $emailCredential, 'password' => $this->input('password')], $this->boolean('remember'))) {
+        
+        RateLimiter::hit($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'username' => trans('auth.failed'), // Pesan error jika gagal
+        ]);
+    }
+
+    RateLimiter::clear($this->throttleKey());
+}
 
     /**
      * Ensure the login request is not rate limited.
@@ -79,7 +101,7 @@ class LoginRequest extends FormRequest
      * Get the rate limiting throttle key for the request.
      */
     public function throttleKey(): string
-    {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
-    }
+{
+    return Str::transliterate(Str::lower($this->input('username')).'|'.$this->ip());
+}
 }

@@ -62,39 +62,34 @@
             @if(Auth::user()->role === 'admin')
                 <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" 
                    href="{{ route('admin.dashboard') }}">
-                    <i class="fas fa-chart-pie"></i> Dasbor
-                </a>
-
-                <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" 
-                    href="{{ route('admin.users.index') }}">
-                    <i class="fas fa-users-cog"></i> Pengguna
-                </a>
-
-                <a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}" 
-                   href="{{ route('admin.categories.index') }}">
-                    <i class="fas fa-tags"></i> Kategori
-                </a>
-
-                <a class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}" 
-                   href="{{ route('admin.products.index') }}">
-                    <i class="fas fa-box-open"></i> Sapras
+                    <i class="fas fa-chart-pie me-1"></i> Dasbor
                 </a>
 
                 <a class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}" href="{{ route('admin.reports.index') }}">
-                    <i class="fas fa-bullhorn"></i> Laporan
+                    <i class="fas fa-bullhorn me-1"></i> Laporan Masuk
                     @if(isset($pendingCount) && $pendingCount > 0)
                         <span class="badge bg-danger ms-2 rounded-pill" style="font-size: 0.7rem;">{{ $pendingCount }}</span>
                     @endif
                 </a>
 
+                <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" 
+                    href="{{ route('admin.users.index') }}">
+                    <i class="fas fa-users-cog me-1"></i> Pengguna
+                </a>
+
                 <a class="nav-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}" 
                    href="{{ route('admin.activity-logs.index') }}">
-                    <i class="fas fa-history"></i> Log Aktivitas
+                    <i class="fas fa-history me-1"></i> Log Aktivitas
                 </a>
             @else
                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" 
                    href="{{ route('dashboard') }}">
-                    <i class="fas fa-clipboard-list"></i> Daftar Inventaris
+                    <i class="fas fa-list-alt me-1"></i> Laporan Saya
+                </a>
+
+                <a class="nav-link {{ request()->routeIs('reports.create') ? 'active' : '' }}" 
+                   href="{{ route('reports.create') }}">
+                    <i class="fas fa-plus-circle me-1"></i> Buat Laporan
                 </a>
             @endif
 

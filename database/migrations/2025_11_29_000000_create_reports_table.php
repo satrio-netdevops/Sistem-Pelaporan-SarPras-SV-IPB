@@ -13,16 +13,35 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id');
-            $table->uuid('product_id')->nullable();
-            $table->string('type'); // e.g., 'damage', 'borrow', 'other'
-            $table->integer('quantity')->default(0);
-            $table->string('status')->default('pending'); // pending/approved/rejected
-            $table->text('notes')->nullable();
+            
+            // PERBAIKAN DISINI: Gunakan foreignUuid, bukan foreignId
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade'); 
+            
+            // 1. Tipe Aset (Sarana / Prasarana)
+            $table->string('asset_type'); 
+            
+            // 2. Tipe Laporan (Kerusakan / Komplain / Saran)
+            $table->string('report_type'); 
+            
+            // 3. Nama Objek (Text Field Manual)
+            $table->string('object_name'); 
+            
+            // 4. Lokasi
+            $table->string('location');
+            
+            // 5. Foto Bukti (Path filenya)
+            $table->string('photo_path')->nullable();
+            
+            // 6. Jumlah (Optional)
+            $table->integer('quantity')->nullable()->default(1);
+            
+            // 7. Deskripsi / Catatan
+            $table->text('description');
+            
+            // Status Laporan
+            $table->enum('status', ['pending', 'approved', 'rejected', 'completed'])->default('pending');
+            
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');
         });
     }
 

@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Category;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Report;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,42 +13,39 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. CREATE ADMIN (Static UUID) 
-        // Ginagamit natin ang static UUID para madaling tandaan sa testing
-        User::firstOrCreate(
-            ['id' => '99999999-9999-9999-9999-999999999999'],
-            [
-                'name' => 'Admin User',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password'), // Default password
+        // ====================================================
+        // 1. MASTER DATA (WAJIB ADA DI PRODUCTION & LOCAL)
+        // ====================================================
+        
+        // Buat Akun Admin (Hanya jika belum ada)
+        if (!User::where('email', 'admin@ipb.ac.id')->exists()) {
+            User::create([
+                'name' => 'Administrator',
+                'email' => 'admin@ipb.ac.id',
+                'password' => bcrypt('password123'), // Ganti password yang kuat nanti
                 'role' => 'admin',
-                'email_verified_at' => now(), // Auto-verified na ang Admin
-            ]
-        );
-
-        // 2. CREATE 3 USER USERS 
-        User::factory(3)->create([
-            'role' => 'user',
-            'password' => Hash::make('password'),
-        ]);
-
-        // 3. CREATE 5 CATEGORIES 
-        $categories = [
-            'Electronics',
-            'Furniture',
-            'Clothing',
-            'Food & Beverages',
-            'Office Supplies'
-        ];
-
-        foreach ($categories as $catName) {
-            Category::firstOrCreate(
-                ['name' => $catName],
-                ['description' => 'Default description for ' . $catName]
-            );
+            ]);
         }
 
-        // 4. Call ReportSeeder to seed reports
-        $this->call(ReportSeeder::class);
+        // ====================================================
+        // 2. DUMMY DATA (HANYA UNTUK LOCAL / LAPTOP KAMU)
+        // ====================================================
+        
+        // Cek: Apakah aplikasi sedang berjalan di mode 'local'?
+        // Mode ini diatur di file .env (APP_ENV=local vs APP_ENV=production)
+        if (app()->environment('local')) {
+            
+            // Buat User Staff Palsu
+            User::factory(5)->create();
+
+            // Panggil ReportSeeder (yang isinya factory laporan palsu)
+            $this->call([
+                ReportSeeder::class, 
+            ]);
+            
+            $this->command->info('Data Dummy berhasil dibuat (Mode Local).');
+        } else {
+            $this->command->warn('Mode Production terdeteksi. Data Dummy tidak dibuat demi keamanan.');
+        }
     }
 }

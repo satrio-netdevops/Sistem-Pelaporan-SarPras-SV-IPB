@@ -188,29 +188,29 @@
                         </p>
                     </div>
 
-                    <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <!-- <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
                         <h6 class="fw-bold text-dark mb-3">Product</h6>
                         <ul class="list-unstyled small">
                             <li class="mb-2"><a href="#" class="text-decoration-none text-secondary hover-link">Features</a></li>
                             <li class="mb-2"><a href="#" class="text-decoration-none text-secondary hover-link">Pricing</a></li>
                             <li class="mb-2"><a href="#" class="text-decoration-none text-secondary hover-link">API</a></li>
                         </ul>
-                    </div>
+                    </div> -->
 
                     <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
-                        <h6 class="fw-bold text-dark mb-3">Company</h6>
+                        <h6 class="fw-bold text-dark mb-3">University</h6>
                         <ul class="list-unstyled small">
-                            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary hover-link">About Us</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary hover-link">Careers</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary hover-link">Contact</a></li>
+                            <li class="mb-2"><a href="https://sv.ipb.ac.id/" class="text-decoration-none text-secondary hover-link">About Us</a></li>
+                            <!-- <li class="mb-2"><a href="#" class="text-decoration-none text-secondary hover-link">Careers</a></li> -->
+                            <li class="mb-2"><a href="https://sv.ipb.ac.id/contact-us/" class="text-decoration-none text-secondary hover-link">Contact</a></li>
                         </ul>
                     </div>
 
                     <div class="col-lg-3 col-md-4">
                         <h6 class="fw-bold text-dark mb-3">Legal</h6>
                         <ul class="list-unstyled small">
-                            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary hover-link">Privacy Policy</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none text-secondary hover-link">Terms of Service</a></li>
+                            <li class="mb-2"><a href="/privacy-policy" class="text-decoration-none text-secondary hover-link">Privacy Policy</a></li>
+                            <li class="mb-2"><a href="/terms" class="text-decoration-none text-secondary hover-link">Terms of Service</a></li>
                         </ul>
                     </div>
                 </div>

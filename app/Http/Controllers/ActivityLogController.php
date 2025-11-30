@@ -3,16 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 
 class ActivityLogController extends Controller
 {
-    public function index(): View
+    // 1. Tampilkan Semua Log
+    public function index()
     {
-        $logs = ActivityLog::with('user')->latest()->get();
+        // Ambil data log, urutkan dari yang terbaru
+        $logs = ActivityLog::with('user')->latest()->paginate(20);
         
         return view('admin.activity_logs.index', compact('logs'));
+    }
+
+    // 2. Hapus Semua Log (Reset) - Fitur Opsional
+    public function reset()
+    {
+        ActivityLog::truncate(); // Hapus semua isi tabel
+        return back()->with('success', 'Semua log aktivitas berhasil dibersihkan.');
     }
 }
