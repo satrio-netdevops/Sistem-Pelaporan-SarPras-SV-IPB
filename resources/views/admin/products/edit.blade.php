@@ -6,7 +6,7 @@
                     <div class="card-header bg-white py-3 border-bottom-0">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-edit text-primary me-2 fs-4"></i>
-                            <h5 class="fw-bold m-0 text-dark">Edit Product</h5>
+                            <h5 class="fw-bold m-0 text-dark">Edit Sarana dan Prasarana</h5>
                         </div>
                     </div>
                     
@@ -15,7 +15,7 @@
                             @csrf @method('PUT')
                             
                             <div class="mb-3">
-                                <label class="form-label fw-bold small text-muted">Product Name <span class="text-danger">*</span></label>
+                                <label class="form-label fw-bold small text-muted">Name <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light text-secondary"><i class="fas fa-box"></i></span>
                                     <input type="text" name="name" class="form-control" value="{{ $product->name }}" placeholder="Product Name" required>

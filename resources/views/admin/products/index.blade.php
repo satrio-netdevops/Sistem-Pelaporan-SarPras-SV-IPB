@@ -22,7 +22,7 @@
                     <thead class="bg-light">
                         <tr>
                             <th class="py-3 px-3 small fw-bold text-muted text-center" style="width: 7%;">#</th>
-                            <th class="py-3 px-3 small fw-bold text-muted">Products</th>
+                            <th class="py-3 px-3 small fw-bold text-muted">Name</th>
                             <th class="py-3 px-3 small fw-bold text-muted">Description</th>
                             <th class="py-3 px-3 small fw-bold text-muted text-center">Category</th>
                             <th class="py-3 px-3 small fw-bold text-muted text-center">Stock</th>

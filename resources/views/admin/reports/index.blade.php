@@ -11,7 +11,7 @@
                         <tr>
                             <th>Tanggal</th>
                             <th>User</th>
-                            <th>Produk</th>
+                            <th>Nama</th>
                             <th>Tipe</th>
                             <th>Qty</th>
                             <th>Deskripsi</th>
