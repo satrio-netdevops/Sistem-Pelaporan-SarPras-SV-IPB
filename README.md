@@ -51,6 +51,7 @@ _(password default Admin: `admin@ipb.ac.id` / `password123`)_.
 
 ```bash
 php artisan storage:link
+```
 
 **Step 6: Menjalankan Aplikasi**
 Buka terminal untuk menjalankan backend dan (opsional) frontend:
