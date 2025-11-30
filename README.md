@@ -8,7 +8,7 @@ Fitur utama termasuk **Laporan Real-time**, **Manajemen Aset**, **Permintaan Per
 
 ## **1. Technical Stack**
 
--   **Framework:** Laravel 12 (PHP 8.2)
+-   **Framework:** Laravel 12 (PHP 8.2++)
 -   **Database:** MySQL (LAMP)
 -   **Frontend:** Bootstrap 5 (Sass/SCSS) + Vite
 -   **Scripting:** JavaScript (ES6), jQuery
@@ -45,7 +45,7 @@ php artisan key:generate
 php artisan migrate:fresh --seed
 ```
 
-_(password default Admin: `admin@example.com` / `password`)_.
+_(password default Admin: `admin@ipb.ac.id` / `password123`)_.
 
 **Step 5: Link Storage**
 
