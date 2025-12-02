@@ -2,6 +2,15 @@
     <div class="container py-5">
         <h3 class="fw-bold mb-4">Daftar Laporan Masuk</h3>
 
+        <div class="d-flex justify-content-end mb-3 gap-2">
+            <a href="{{ route('admin.reports.export.pdf') }}" target="_blank" class="btn btn-outline-secondary">
+                <i class="fas fa-file-pdf me-1"></i> Export PDF
+            </a>
+            <a href="{{ route('admin.reports.export.excel') }}" target="_blank" class="btn btn-outline-success">
+                <i class="fas fa-file-excel me-1"></i> Export Excel
+            </a>
+        </div>
+
         <div class="card border-0 shadow-sm">
             <div class="card-body p-0">
                 <div class="table-responsive">

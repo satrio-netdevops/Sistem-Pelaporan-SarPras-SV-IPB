@@ -12,6 +12,52 @@
                 </div>
             </div>
         </div>
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h6 class="fw-bold">Grafik Laporan Masuk (7 hari terakhir)</h6>
+                        <canvas id="reportsChart" height="80"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const ctx = document.getElementById('reportsChart').getContext('2d');
+
+                fetch("{{ route('admin.dashboard.chart') }}")
+                    .then(res => res.json())
+                    .then(json => {
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: json.labels,
+                                datasets: [{
+                                    label: 'Laporan Masuk',
+                                    data: json.data,
+                                    borderColor: '#4CAF50',
+                                    backgroundColor: 'rgba(76,175,80,0.1)',
+                                    tension: 0.3,
+                                    fill: true
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { display: false }
+                                },
+                                scales: {
+                                    y: { beginAtZero: true, precision: 0 }
+                                }
+                            }
+                        });
+                    })
+                    .catch(err => console.error('Error loading chart data', err));
+            });
+        </script>
 
         <div class="row g-4 mb-5">
             

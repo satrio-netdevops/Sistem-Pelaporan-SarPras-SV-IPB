@@ -7,6 +7,9 @@ use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ReportsExport;
 
 class ReportController extends Controller
 {
@@ -22,6 +25,24 @@ class ReportController extends Controller
         // LOGIKA STAFF: Arahkan ke folder staff/reports (Lihat history sendiri)
         $reports = Report::where('user_id', Auth::id())->latest()->paginate(10);
         return view('staff.reports.index', compact('reports'));
+    }
+
+    // Export semua laporan ke PDF
+    public function exportPdf(Request $request)
+    {
+        $reports = Report::with('user')->latest()->get();
+
+        $pdf = Pdf::loadView('admin.reports.pdf', compact('reports'));
+
+        return $pdf->download('laporan-masuk.pdf');
+    }
+
+    // Export semua laporan ke Excel
+    public function exportExcel(Request $request)
+    {
+        $reports = Report::with('user')->latest()->get();
+
+        return Excel::download(new ReportsExport($reports), 'laporan-masuk.xlsx');
     }
 
     // 2. MENAMPILKAN FORMULIR (CREATE)

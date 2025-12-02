@@ -33,10 +33,19 @@ class AdminController extends Controller
     // ... method chart data biarkan dulu atau sesuaikan nanti ...
     public function getChartData()
     {
-        // Dummy data dulu biar tidak error
+        // Kembalikan data jumlah laporan per hari untuk 7 hari terakhir
+        $labels = [];
+        $data = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $labels[] = now()->subDays($i)->format('d M');
+            $data[] = Report::whereDate('created_at', $date)->count();
+        }
+
         return response()->json([
-            'labels' => ['Jan', 'Feb', 'Mar'],
-            'data' => [10, 20, 5]
+            'labels' => $labels,
+            'data' => $data
         ]);
     }
 }

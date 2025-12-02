@@ -43,6 +43,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Manajemen Laporan (Lihat Semua, Approve, Reject)
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index'); // Admin lihat semua
+    // Export Laporan (PDF & Excel)
+    Route::get('/reports/export/pdf', [ReportController::class, 'exportPdf'])->name('reports.export.pdf');
+    Route::get('/reports/export/excel', [ReportController::class, 'exportExcel'])->name('reports.export.excel');
     Route::patch('/reports/{id}/approve', [ReportController::class, 'approve'])->name('reports.approve');
     Route::patch('/reports/{id}/reject', [ReportController::class, 'reject'])->name('reports.reject');
     Route::delete('/reports/{id}', [ReportController::class, 'destroy'])->name('reports.destroy'); // Admin hapus paksa
