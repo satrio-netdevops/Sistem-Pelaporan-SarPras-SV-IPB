@@ -1,0 +1,59 @@
+@page { 
+    size: legal portrait; 
+    margin: 0.5in; 
+}
+
+body {
+    font-family: 'DejaVu Sans', sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate; 
+    border-spacing: 15px; 
+}
+
+td {
+    width: 33.33%;      
+    height: 140px;      
+    border: 2px dashed #ccc; 
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.title {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    height: 15px;
+    overflow: hidden;
+}
+
+.meta {
+    font-size: 9px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.barcode-wrapper {
+    margin: 5px 0;
+}
+
+.barcode-img {
+    height: 35px;
+    max-width: 100%;
+}
+
+.barcode-num {
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+.price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+}

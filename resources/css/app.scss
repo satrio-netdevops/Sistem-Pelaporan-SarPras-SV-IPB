@@ -1,0 +1,443 @@
+// Import Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// --- NEW ROOT COLORS (Pastel Green Theme) ---
+$primary-green: #B0DB9C; // Main Action Color (Buttons, Icons)
+$bg-left:       #ECFAE5; // Lightest Green (Left Panel BG)
+$bg-right:      #FFFFFF; // White (Right Panel BG)
+$input-bg:      #F9FCF8; // Very light tint for inputs (derived from palette)
+$text-dark:     #212529; // Standard Dark Text
+$text-muted:    #6c757d; // Muted Text
+
+// --- GLOBAL RESET ---
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: $bg-right;
+    font-family: 'Nunito', sans-serif;
+    color: $text-dark;
+    padding-bottom: 80px; 
+}
+
+// --- LAYOUT ---
+.split-screen {
+    min-height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.row-full {
+    height: 100vh; 
+    width: 100%;
+}
+
+// --- LEFT PANEL ---
+.left-panel {
+    background-color: $bg-left; 
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+    
+    .text-content {
+        text-align: center;
+        width: 100%;
+        max-width: 650px; 
+        z-index: 10;
+    }
+
+    h2 {
+        font-weight: 900;
+        color: #1a1a1a;
+        margin-bottom: 0.5rem;
+        font-size: 3rem; 
+        display: flex;              
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.3em;
+    }
+    
+    // TYPING TEXT (Green Color)
+    .typing-text {
+        color: #8AB973; 
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 4px solid #1a1a1a;
+        animation: type-cycle 7s steps(30, end) infinite, blink 0.75s step-end infinite;
+    }
+
+    p {
+        color: $text-muted;
+        font-size: 1.1rem;
+        margin-top: 10px;
+    }
+
+    .hero-img {
+        width: 100%;
+        max-width: 650px;
+        height: auto;
+        margin-top: 2rem;
+        margin-bottom: 3rem; 
+        filter: drop-shadow(0 10px 15px rgba(0,0,0,0.05));
+        transform: scale(1.1); 
+    }
+    
+    .avatar-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 1rem; 
+        
+        img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            margin-left: -20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            &:first-child { margin-left: 0; }
+        }
+        
+        span {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #444;
+            margin-left: 10px;
+        }
+    }
+}
+
+// --- RIGHT PANEL ---
+.right-panel {
+    background-color: $bg-right;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 2rem;
+
+    // AUTOMATIC SCROLL 
+    // Kapag nakita ng CSS na may class na ".legal-content" sa loob ng panel,
+    // babaguhin niya ang layout para maging scrollable at magsimula sa taas.
+    &:has(.legal-content) {
+        align-items: flex-start; // Start from top (hindi gitna)
+        overflow-y: auto;        // Enable scrolling
+        padding-top: 4rem; 
+    }
+}
+
+// --- LEGAL PAGES STYLING (Terms & Privacy) ---
+.legal-content {
+    width: 100%;
+    max-width: 700px; 
+    padding-bottom: 3rem;
+
+    h1 { 
+        font-weight: 900; 
+        color: #1a1a1a; 
+        font-size: 2.2rem; 
+        margin-bottom: 1rem; 
+    }
+    
+    h4 { 
+        font-weight: 800; 
+        color: #2d2d2d; 
+        margin-top: 2rem; 
+        margin-bottom: 0.8rem; 
+        font-size: 1.25rem;
+    }
+    
+    p, li { 
+        color: $text-muted; 
+        line-height: 1.7; 
+        font-size: 1rem; 
+        margin-bottom: 1rem; 
+    }
+    
+    ul { 
+        padding-left: 1.5rem; 
+        margin-bottom: 1.5rem; 
+    }
+
+    hr {
+        opacity: 0.1;
+        margin: 2rem 0;
+    }
+}
+
+// KATAMTAMANG CONTAINER SIZE
+.auth-container {
+    width: 100%;
+    max-width: 480px;
+    padding: 1.5rem;
+}
+
+.auth-container h3 {
+    font-size: 1.75rem;
+}
+
+// --- FORM STYLES ---
+.waving-hand {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: inline-block;
+    animation: wave 2.5s infinite;
+    transform-origin: 70% 70%;
+}
+
+.modern-input-group {
+    background-color: $input-bg;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 8px 15px;
+    margin-bottom: 1.2rem;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+
+    i {
+        color: #A0C98E;
+        font-size: 1.1rem;
+        margin-right: 12px;
+    }
+
+    input {
+        border: none;
+        background: transparent;
+        width: 100%;
+        padding: 8px 0;
+        color: $text-dark;
+        font-weight: 500;
+        font-size: 1rem;
+
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        &::placeholder {
+            color: #adb5bd;
+            font-size: 0.95rem;
+        }
+    }
+
+    &:focus-within {
+        background-color: #fff;
+        border-color: $primary-green;
+        box-shadow: 0 0 0 3px #DDF6D2; 
+        i { color: $primary-green; }
+    }
+}
+
+// PRIMARY BUTTON
+.btn-primary {
+    background-color: $primary-green;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px; 
+    font-size: 1rem;
+    width: auto; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.3px;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: #9BC985;
+        transform: translateY(-1px);
+    }
+}
+
+// AUTH BUTTONS
+.auth-container .btn-primary {
+    width: 100%;
+    padding: 12px;
+}
+
+// LINKS
+.text-primary {
+    color: #8AB973 !important; 
+    
+    &:hover {
+        color: #76a360 !important;
+        text-decoration: underline;
+    }
+}
+
+// --- RECAPTCHA STYLING ---
+.recaptcha-wrapper {
+    width: fit-content; 
+    margin: 0 auto 1.5rem auto; 
+    
+    // Minimal styling
+    background-color: #fff; 
+    padding: 4px;          
+    border-radius: 4px;   
+    
+    // Border na match sa theme 
+    border: 1px solid #e0e0e0; 
+    transition: all 0.3s ease;
+
+    // Hover Effect: Green Glow
+    &:hover {
+        border-color: $primary-green;
+        box-shadow: 0 0 0 4px #DDF6D2; 
+    }
+    
+    // Siguraduhing walang overflow ang iframe
+    iframe {
+        display: block;
+    }
+}
+
+// --- ANIMATIONS ---
+@keyframes wave {
+    0% { transform: rotate( 0.0deg) }
+    10% { transform: rotate(14.0deg) }
+    20% { transform: rotate(-8.0deg) }
+    30% { transform: rotate(14.0deg) }
+    40% { transform: rotate(-4.0deg) }
+    50% { transform: rotate(10.0deg) }
+    60% { transform: rotate( 0.0deg) }
+    100% { transform: rotate( 0.0deg) }
+}
+
+@keyframes type-cycle {
+    0% { width: 0; }
+    15% { width: 25ch; } 
+    60% { width: 25ch; } 
+    75% { width: 0; }
+    100% { width: 0; }
+}
+
+@keyframes blink {
+    from, to { border-color: transparent }
+    50% { border-color: #1a1a1a; }
+}
+
+// --- CUSTOM NAVIGATION STYLES ---
+
+// 1. Top Navbar (White Background)
+.top-navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.8rem 0;
+    
+    .navbar-brand {
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: #212529;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        
+        i {
+            color: $primary-green;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+    }
+}
+
+// 2. Sub Navbar 
+.sub-navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem 0;
+    
+    // --- STICKY LOGIC ---
+    position: sticky;
+    top: 79px; 
+    z-index: 900;
+    width: 100%;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+    .nav-link {
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 8px 16px;
+        border-radius: 8px;
+        margin-right: 5px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        i {
+            color: $primary-green; 
+            transition: color 0.2s;
+        }
+
+        // Hover State
+        &:hover {
+            background-color: $bg-left; 
+            color: #1a1a1a;
+            i { color: #1a1a1a; }
+        }
+
+        // Active State
+        &.active {
+            background-color: $primary-green; 
+            color: white;
+            box-shadow: 0 2px 4px rgba(176, 219, 156, 0.4);
+            i { color: white; }
+        }
+    }
+}
+
+// Dropdown Styling
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    
+    .dropdown-item {
+        padding: 8px 16px;
+        &:hover {
+            background-color: $bg-left;
+        }
+    }
+}
+
+// --- MODERN CARD STYLING ---
+.card-modern {
+    border: none; 
+    border-radius: 15px; 
+    background-color: #ffffff;
+    // Ito ang nagpapalitaw (Stronger Shadow)
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important; 
+    transition: all 0.3s ease; 
+
+    // Lift Effect pag tinutok ang mouse
+    &:hover {
+        transform: translateY(-5px); 
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important; 
+    }
+}
+
+// --- FIXED FOOTER STYLING ---
+footer {
+    position: fixed;  // Pako sa screen
+    bottom: 0;        // Didikit sa baba
+    left: 0;
+    width: 100%;      // Sakop buong lapad
+    z-index: 1030;    // Nasa ibabaw ng content
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05); // Shadow na pataas para lumitaw
+}
