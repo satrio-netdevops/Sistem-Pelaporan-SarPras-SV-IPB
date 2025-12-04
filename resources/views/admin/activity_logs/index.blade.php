@@ -333,26 +333,31 @@
     <div class="container py-5">
         
         <div class="page-hero">
-            <div class="d-flex align-items-center position-relative z-1">
-                <div class="hero-icon-box me-4">
-                    <i class="fas fa-history fa-2x text-white"></i>
+            <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-center gap-3 w-100">
+                
+                <div class="d-flex flex-column flex-md-row align-items-center position-relative z-1 text-center text-md-start">
+                    
+                    <div class="hero-icon-box mb-2 mb-md-0 me-md-4">
+                        <i class="fas fa-history fa-2x text-white"></i>
+                    </div>
+                    
+                    <div>
+                        <h3 class="fw-bold m-0">Log Aktivitas Sistem</h3>
+                        <p class="m-0 opacity-75 mt-1 text-light">Rekam jejak digital aktivitas pengguna & administrator.</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="fw-bold m-0">Log Aktivitas Sistem</h3>
-                    <p class="m-0 opacity-75 mt-1 text-light">Rekam jejak digital aktivitas pengguna & administrator.</p>
-                </div>
+                
+                @if($logs->count() > 0)
+                    <div class="position-relative z-1">
+                        <form action="{{ route('admin.activity-logs.reset') }}" method="POST" id="resetLogForm">
+                            @csrf 
+                            <button type="button" class="btn btn-glass-danger px-4 py-2 rounded-3 d-flex align-items-center" onclick="confirmResetLog()">
+                                <i class="fas fa-trash-alt me-2"></i> Bersihkan Log
+                            </button>
+                        </form>
+                    </div>
+                @endif
             </div>
-
-            @if($logs->count() > 0)
-                <div class="position-relative z-1">
-                    <form action="{{ route('admin.activity-logs.reset') }}" method="POST" id="resetLogForm">
-                        @csrf 
-                        <button type="button" class="btn btn-glass-danger px-4 py-2 rounded-3 d-flex align-items-center" onclick="confirmResetLog()">
-                            <i class="fas fa-trash-alt me-2"></i> Bersihkan Log
-                        </button>
-                    </form>
-                </div>
-            @endif
         </div>
 
         <div class="log-card">

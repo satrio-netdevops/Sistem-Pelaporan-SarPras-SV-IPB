@@ -22,6 +22,9 @@ class Report extends Model
         'description',
         'photo_path',
         'status',
+        'resolution_image', 
+        'resolution_note',
+        'resolved_at',
     ];
 
     // Relasi ke User (Pelapor)

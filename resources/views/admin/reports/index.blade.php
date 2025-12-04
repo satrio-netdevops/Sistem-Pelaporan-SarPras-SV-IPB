@@ -6,6 +6,7 @@
         :root {
             --ipb-blue: #004a8f;
             --ipb-dark: #003366;
+            --ipb-magenta: #9d174d;
             --color-blue: #2563eb;
             --color-green: #10b981;
             --color-red: #ef4444;
@@ -17,6 +18,23 @@
             font-family: 'Poppins', sans-serif !important;
         }
 
+        .bg-magenta { background-color: var(--ipb-magenta) !important; }
+        .text-magenta { color: var(--ipb-magenta) !important; }
+        .border-magenta { border-color: var(--ipb-magenta) !important; }
+        .btn-action-magenta { background-color: #fce7f3; color: var(--ipb-magenta); }
+        .btn-action-magenta:hover { background-color: var(--ipb-magenta); color: white; }
+
+        .btn-magenta {
+            background-color: var(--ipb-magenta);
+            color: white;
+            border: none;
+            transition: all 0.3s;
+        }
+        .btn-magenta:hover {
+            background-color: #831843; /* Magenta lebih gelap saat hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(157, 23, 77, 0.3);
+        }
         /* 2. HERO HEADER */
         .page-hero {
             background: linear-gradient(135deg, #001f3f 0%, #004a8f 100%);
@@ -164,177 +182,33 @@
         .btn-action-danger { background-color: #fef2f2; color: #dc2626; }
         .btn-action-danger:hover { background-color: #dc2626; color: white; }
 
-        .btn-action-delete { background-color: #f1f5f9; color: #64748b; }
-        .btn-action-delete:hover { background-color: #ef4444; color: white; }
-
-        /* 6. SWEET ALERT CUSTOM MODAL */
-        .custom-alert-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            animation: fadeIn 0.2s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-
-        @keyframes slideDown {
-            from { 
-                opacity: 0;
-                transform: translateY(-20px) scale(0.95);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .custom-alert-box {
-            background: white;
-            border-radius: 1.25rem;
-            padding: 2rem;
-            max-width: 420px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.3s ease;
-            text-align: center;
-        }
-
-        .alert-icon-wrapper {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1.5rem;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .alert-icon {
-            font-size: 2.5rem;
-            color: #dc2626;
-        }
-
-        .alert-icon-wrapper::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: #fee2e2;
-            opacity: 0.3;
-            animation: ripple 2s infinite;
-        }
-
-        @keyframes ripple {
-            0% { transform: scale(1); opacity: 0.3; }
-            100% { transform: scale(1.3); opacity: 0; }
-        }
-
-        .alert-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 0.75rem;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .alert-message {
-            color: #64748b;
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-
-        .alert-buttons {
-            display: flex;
-            gap: 0.75rem;
-            justify-content: center;
-        }
-
-        .alert-btn {
-            padding: 0.75rem 2rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'Poppins', sans-serif;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .alert-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .alert-btn:active {
-            transform: translateY(0);
-        }
-
-        .alert-btn-cancel {
-            background-color: #f1f5f9;
-            color: #475569;
-        }
-
-        .alert-btn-cancel:hover {
-            background-color: #e2e8f0;
-        }
-
-        .alert-btn-confirm {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            color: white;
-        }
-
-        .alert-btn-confirm:hover {
-            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
-        }
-
     </style>
 
     <div class="container py-5">
         
         <div class="page-hero">
-            <div class="d-flex align-items-center position-relative z-1">
-                <div class="bg-white bg-opacity-10 p-3 rounded-4 me-3 backdrop-blur">
-                    <i class="fas fa-clipboard-list fa-2x"></i>
+            <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-center gap-3 w-100">
+                
+                <div class="d-flex flex-column flex-md-row align-items-center position-relative z-1 text-center text-md-start">
+                    
+                    <div class="bg-white bg-opacity-10 p-3 rounded-4 backdrop-blur mb-2 mb-md-0 me-md-4">
+                        <i class="fas fa-clipboard-list fa-2x"></i>
+                    </div>
+                    
+                    <div>
+                        <h3 class="fw-bold m-0">Daftar Laporan Masuk</h3>
+                        <p class="m-0 opacity-75 small">Kelola dan verifikasi semua laporan civitas akademika.</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="fw-bold m-0">Daftar Laporan Masuk</h3>
-                    <p class="m-0 opacity-75 small">Kelola dan verifikasi semua laporan civitas akademika.</p>
+                
+                <div class="d-flex gap-2 position-relative z-1">
+                    <a href="{{ route('admin.reports.export.pdf') }}" target="_blank" class="btn btn-light btn-sm fw-bold text-danger d-flex align-items-center shadow-sm">
+                        <i class="fas fa-file-pdf me-2"></i> PDF
+                    </a>
+                    <a href="{{ route('admin.reports.export.excel') }}" target="_blank" class="btn btn-light btn-sm fw-bold text-success d-flex align-items-center shadow-sm">
+                        <i class="fas fa-file-excel me-2"></i> Excel
+                    </a>
                 </div>
-            </div>
-            
-            <div class="d-flex gap-2 position-relative z-1">
-                <a href="{{ route('admin.reports.export.pdf') }}" target="_blank" class="btn btn-light btn-sm fw-bold text-danger d-flex align-items-center shadow-sm">
-                    <i class="fas fa-file-pdf me-2"></i> PDF
-                </a>
-                <a href="{{ route('admin.reports.export.excel') }}" target="_blank" class="btn btn-light btn-sm fw-bold text-success d-flex align-items-center shadow-sm">
-                    <i class="fas fa-file-excel me-2"></i> Excel
-                </a>
             </div>
         </div>
 
@@ -431,16 +305,19 @@
                                                 <button class="btn-action btn-action-danger" title="Tolak"><i class="fas fa-times"></i></button>
                                             </form>
                                         @elseif($report->status == 'approved')
-                                            <form action="{{ route('admin.reports.complete', $report->id) }}" method="POST">
-                                                @csrf @method('PATCH')
-                                                <button class="btn-action btn-action-success" title="Selesai"><i class="fas fa-check-double"></i></button>
-                                            </form>
-                                        @endif
-                                        <form action="{{ route('admin.reports.destroy', $report->id) }}" method="POST" class="delete-form">
+   <button type="button" 
+        class="btn-action btn-action-magenta btn-complete-trigger" 
+        title="Selesai & Verifikasi"
+        data-bs-toggle="modal" 
+        data-bs-target="#completionModal"
+        data-url="{{ route('admin.reports.complete', $report->id) }}"
+        data-object="{{ $report->object_name }}">
+    <i class="fas fa-check-double"></i>
+</button>
+@endif
+                                        <form action="{{ route('admin.reports.destroy', $report->id) }}" method="POST" onsubmit="return confirm('Hapus permanen?')">
                                             @csrf @method('DELETE')
-                                            <button type="button" class="btn-action btn-action-delete" title="Hapus" onclick="confirmDelete(this)">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
+                                            <button class="btn-action text-secondary bg-light" title="Hapus"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </div>
                                 </td>
@@ -477,7 +354,6 @@
         </div>
     </div>
 
-    <!-- Modal Image -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow-lg rounded-4">
@@ -489,6 +365,49 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="completionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header text-white bg-magenta rounded-top-4">
+                    <h5 class="modal-title fw-bold">
+                        <i class="fas fa-clipboard-check me-2"></i>Verifikasi Penyelesaian
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                
+                <form id="completionForm" action="" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PATCH')
+                    
+                    <div class="modal-body p-4">
+                        <div class="alert alert-light border-start border-magenta border-4 mb-3">
+                            <small class="text-muted">Anda akan menyelesaikan laporan untuk:</small><br>
+                            <strong class="text-magenta fs-5" id="modalObjectName">-</strong>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted text-uppercase">Foto Bukti Perbaikan <span class="text-danger">*</span></label>
+                            <input type="file" name="resolution_image" class="form-control" accept="image/*" required>
+                            <div class="form-text small">Upload foto kondisi aset setelah diperbaiki.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted text-uppercase">Catatan Pengerjaan <span class="text-danger">*</span></label>
+                            <textarea name="resolution_note" class="form-control" rows="3" placeholder="Contoh: AC sudah dicuci dan freon diisi ulang..." required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer border-0 px-4 pb-4">
+                        <button type="button" class="btn btn-light text-muted fw-bold" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-magenta fw-bold px-4">
+                            <i class="fas fa-save me-2"></i>Simpan & Selesai
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script>
         document.addEventListener("DOMContentLoaded", function(){
             
@@ -543,80 +462,24 @@
             statusFilter.addEventListener('change', filterTable);
         });
 
-        // 3. Custom Alert untuk Konfirmasi Hapus
-        function confirmDelete(button) {
-            // Buat overlay
-            const overlay = document.createElement('div');
-            overlay.className = 'custom-alert-overlay';
+var completionModal = document.getElementById('completionModal');
+    if (completionModal) {
+        completionModal.addEventListener('show.bs.modal', function (event) {
+            // Tombol yang diklik
+            var button = event.relatedTarget;
             
-            // Buat alert box
-            overlay.innerHTML = `
-                <div class="custom-alert-box">
-                    <div class="alert-icon-wrapper">
-                        <i class="fas fa-exclamation-triangle alert-icon"></i>
-                    </div>
-                    <h3 class="alert-title">Konfirmasi Hapus</h3>
-                    <p class="alert-message">
-                        Apakah Anda yakin ingin menghapus laporan ini secara permanen? 
-                        <br><strong>Tindakan ini tidak dapat dibatalkan.</strong>
-                    </p>
-                    <div class="alert-buttons">
-                        <button class="alert-btn alert-btn-cancel" onclick="closeAlert()">
-                            <i class="fas fa-times"></i> Batal
-                        </button>
-                        <button class="alert-btn alert-btn-confirm" onclick="proceedDelete(this)">
-                            <i class="fas fa-trash-alt"></i> Hapus
-                        </button>
-                    </div>
-                </div>
-            `;
+            // Ambil data dari atribut data-*
+            var actionUrl = button.getAttribute('data-url');
+            var objectName = button.getAttribute('data-object');
             
-            // Simpan referensi form
-            overlay.dataset.formButton = button.closest('form').id || 'temp-form-' + Date.now();
-            button.closest('form').id = overlay.dataset.formButton;
+            // Update isi Modal
+            var form = document.getElementById('completionForm');
+            var objectNameText = document.getElementById('modalObjectName');
             
-            // Tambahkan ke body
-            document.body.appendChild(overlay);
-            
-            // Prevent body scroll
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeAlert() {
-            const overlay = document.querySelector('.custom-alert-overlay');
-            if (overlay) {
-                overlay.style.animation = 'fadeOut 0.2s ease';
-                setTimeout(() => {
-                    overlay.remove();
-                    document.body.style.overflow = '';
-                }, 200);
-            }
-        }
-
-        function proceedDelete(button) {
-            const overlay = button.closest('.custom-alert-overlay');
-            const formId = overlay.dataset.formButton;
-            const form = document.getElementById(formId);
-            
-            if (form) {
-                form.submit();
-            }
-            
-            closeAlert();
-        }
-
-        // Close on overlay click
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('custom-alert-overlay')) {
-                closeAlert();
-            }
+            form.action = actionUrl;
+            objectNameText.textContent = objectName;
         });
-
-        // Close on ESC key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeAlert();
-            }
-        });
+    }
+        
     </script>
 </x-app-layout>

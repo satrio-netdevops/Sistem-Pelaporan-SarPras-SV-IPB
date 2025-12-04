@@ -126,19 +126,42 @@ class ReportController extends Controller
     }
 
     // Admin: Selesaikan Laporan (Status: Approved -> Completed)
-    public function complete($id)
+    public function complete(Request $request, $id)
     {
         $report = Report::findOrFail($id);
-        $report->update(['status' => 'completed']);
+
+        // 1. Validasi Input
+        $request->validate([
+            'resolution_image' => 'required|image|mimes:jpeg,png,jpg|max:5120', // Max 5MB
+            'resolution_note'  => 'required|string|min:5',
+        ], [
+            'resolution_image.required' => 'Wajib menyertakan foto bukti perbaikan.',
+            'resolution_note.required'  => 'Catatan pengerjaan wajib diisi.',
+        ]);
+
+        // 2. Upload Gambar Bukti
+        $evidencePath = null;
+        if ($request->hasFile('resolution_image')) {
+            // Simpan di folder storage/app/public/evidence
+            $evidencePath = $request->file('resolution_image')->store('evidence', 'public');
+        }
+
+        // 3. Update Data Laporan
+        $report->update([
+            'status' => 'completed',
+            'resolution_image' => $evidencePath, // Pastikan kolom ini sudah ada di DB (via migration)
+            'resolution_note' => $request->resolution_note, // Pastikan kolom ini sudah ada di DB
+            'resolved_at' => now(), // Pastikan kolom ini sudah ada di DB
+        ]);
 
         // LOG LEBIH DETAIL
         ActivityLog::create([
             'user_id' => Auth::id(),
             'action' => 'Selesaikan Laporan',
-            'details' => "Admin menyelesaikan laporan: " . $report->object_name . " (Pelapor: " . $report->user->name . ")"
+            'details' => "Admin menyelesaikan laporan: " . $report->object_name . " dengan bukti terlampir."
         ]);
 
-        return back()->with('success', 'Laporan telah diselesaikan.');
+        return back()->with('success', 'Laporan berhasil diselesaikan dan bukti telah tersimpan.');
     }
 
     // 5. HAPUS LAPORAN

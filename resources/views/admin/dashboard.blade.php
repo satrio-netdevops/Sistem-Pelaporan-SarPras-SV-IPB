@@ -140,10 +140,12 @@
         
         <div class="row mb-5">
             <div class="col-12">
-                <div class="dashboard-hero p-5 d-flex align-items-center">
-                    <div class="hero-icon-box me-4">
+                <div class="dashboard-hero p-5 d-flex flex-column flex-md-row align-items-center text-center text-md-start">
+                    
+                    <div class="hero-icon-box mb-3 mb-md-0 me-md-4">
                         <i class="fas fa-chart-line fa-2x"></i>
                     </div>
+                    
                     <div>
                         <h1 class="fw-bold m-0">Dashboard Admin</h1>
                         <p class="m-0 opacity-75 fs-5">Pantau aktivitas pelaporan sarana dan prasarana secara real-time</p>

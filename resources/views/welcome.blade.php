@@ -636,7 +636,7 @@
                         <h6 class="fw-bold text-white mb-3">Bantuan</h6>
                         <ul class="list-unstyled small">
                             <li class="mb-2"><a href="#" class="text-decoration-none text-muted hover-link">Panduan Pelaporan</a></li>
-                            <li class="mb-2"><a href="#" class="text-decoration-none text-muted hover-link">Kontak Helpdesk</a></li>
+                            <li class="mb-2"><a href="https://helpcenter.ipb.ac.id/" class="text-decoration-none text-muted hover-link" target="_blank">Kontak Helpdesk</a></li>
                         </ul>
                     </div>
                 </div>

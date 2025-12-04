@@ -44,7 +44,7 @@
             {{-- Label Navy --}}
             <label class="form-label fw-bold small text-navy-custom">{{ __('Kata Sandi Saat Ini') }}</label>
             <div class="input-group">
-                <span class="input-group-text bg-light border-end-0"><i class="fas fa-lock"></i></span>
+                <span class="input-group-text bg-light border-end-0"><i class="fas fa-lock" id="togglePassword"></i></span>
                 {{-- Tambahkan class ipb-form-control --}}
                 <input type="password" name="current_password" 
                        class="form-control ipb-form-control border-start-0 @error('current_password') is-invalid @enderror" 
@@ -63,7 +63,7 @@
         <div class="mb-3">
             <label class="form-label fw-bold small text-navy-custom">{{ __('Kata Sandi Baru') }}</label>
             <div class="input-group">
-                <span class="input-group-text bg-light border-end-0"><i class="fas fa-key"></i></span>
+                <span class="input-group-text bg-light border-end-0"><i class="fas fa-key" id="togglePassword"></i></span>
                 <input type="password" name="password" 
                        class="form-control ipb-form-control border-start-0 @error('password') is-invalid @enderror" 
                        placeholder="Masukkan kata sandi baru" autocomplete="new-password">
@@ -81,7 +81,7 @@
         <div class="mb-3">
             <label class="form-label fw-bold small text-navy-custom">{{ __('Konfirmasi Kata Sandi') }}</label>
             <div class="input-group">
-                <span class="input-group-text bg-light border-end-0"><i class="fas fa-check-circle"></i></span>
+                <span class="input-group-text bg-light border-end-0"><i class="fas fa-check-circle" id="togglePassword"></i></span>
                 <input type="password" name="password_confirmation" 
                        class="form-control ipb-form-control border-start-0" 
                        placeholder="Ulangi kata sandi baru" autocomplete="new-password">
@@ -108,27 +108,20 @@
     
     {{-- Script Sederhana untuk Toggle Password (Mata) --}}
     <script>
-        document.querySelectorAll('.toggle-password').forEach(item => {
-            item.addEventListener('click', function() {
-                // Cari input terdekat dalam satu group
-                const input = this.closest('.input-group').querySelector('input');
-                if (input) {
-                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-                    input.setAttribute('type', type);
-                    
-                    this.classList.toggle('fa-eye');
-                    this.classList.toggle('fa-eye-slash');
-                    
-                    // Ubah warna ikon saat aktif
-                    if(type === 'text') {
-                        this.style.color = '#001f5f'; // Navy
-                        this.style.opacity = '1';
-                    } else {
-                        this.style.color = ''; // Reset ke style CSS default
-                        this.style.opacity = '0.7';
-                    }
+        togglePassword.addEventListener('click', function (e) {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                
+                // Toggle icon class
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+                
+                // Ganti warna icon agar user tau sedang aktif
+                if(type === 'text') {
+                    this.style.color = '#00aaff';
+                } else {
+                    this.style.color = '#6c757d';
                 }
             });
-        });
     </script>
 </section>
