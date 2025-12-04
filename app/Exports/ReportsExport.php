@@ -6,9 +6,15 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Support\Collection;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class ReportsExport implements FromCollection, WithHeadings, WithMapping
+class ReportsExport implements FromCollection, WithHeadings, WithMapping, WithStyles, WithColumnWidths, WithTitle
 {
     protected $reports;
 
@@ -48,5 +54,36 @@ class ReportsExport implements FromCollection, WithHeadings, WithMapping
             $report->description,
             $report->status,
         ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        $highestRow = $sheet->getHighestRow();
+        $highestColumn = $sheet->getHighestColumn();
+        $range = 'A1:' . $highestColumn . $highestRow;
+
+        return [
+            1 => ['font' => ['bold' => true], 'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => 'CCCCCC']]],
+            $range => ['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]],
+        ];
+    }
+
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 20, // Waktu
+            'B' => 20, // Pelapor
+            'C' => 20, // Objek
+            'D' => 20, // Lokasi
+            'E' => 20, // Tipe Laporan
+            'F' => 20, // Tipe Aset
+            'G' => 30, // Deskripsi
+            'H' => 20, // Status
+        ];
+    }
+
+    public function title(): string
+    {
+        return 'Laporan Sarana dan Prasarana';
     }
 }

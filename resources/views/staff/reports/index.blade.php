@@ -86,6 +86,9 @@
 
     </style>
 
+    {{-- SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <div class="container py-5">
         {{-- Header Section --}}
         <div class="d-flex justify-content-between align-items-end mb-4">
@@ -153,12 +156,21 @@
                                     </td>
                                     <td class="text-center">
                                         @if($report->status == 'pending')
-                                            <form action="{{ route('reports.destroy', $report->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan laporan ini?')">
+                                            
+                                            {{-- Tombol Delete (Trigger SweetAlert) --}}
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-outline-danger rounded-pill px-3 btn-delete"
+                                                    data-id="{{ $report->id }}">
+                                                <i class="fas fa-trash-alt me-1"></i> Batalkan
+                                            </button>
+
+                                            {{-- Form Delete (Hidden) --}}
+                                            <form id="delete-form-{{ $report->id }}" 
+                                                  action="{{ route('reports.destroy', $report->id) }}" 
+                                                  method="POST" class="d-none">
                                                 @csrf @method('DELETE')
-                                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                                                    <i class="fas fa-trash-alt me-1"></i> Batalkan
-                                                </button>
                                             </form>
+
                                         @else
                                             <span class="text-muted small fst-italic">Tidak ada aksi</span>
                                         @endif
@@ -186,4 +198,34 @@
             {{ $reports->links() }}
         </div>
     </div>
+
+    {{-- Script SweetAlert2 Konfirmasi --}}
+    <script>
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function () {
+                let id = this.getAttribute('data-id');
+
+                Swal.fire({
+                title: 'Hapus Laporan?',
+                text: "Aksi ini tidak bisa dibatalkan.",
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#d93025',  // merah Google
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fas fa-trash-alt me-1"></i> Hapus',
+                cancelButtonText: 'Kembali',
+                customClass: {
+                    popup: 'rounded-4 shadow-lg',
+                    title: 'fw-bold text-danger',
+                },
+
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('delete-form-' + id).submit();
+                    }
+                });
+            });
+        });
+    </script>
+
 </x-app-layout>

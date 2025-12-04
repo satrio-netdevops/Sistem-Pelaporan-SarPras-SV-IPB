@@ -33,7 +33,7 @@
                 font-family: 'Outfit', sans-serif;
                 background: var(--dark-gradient);
                 color: var(--text-main);
-                overflow-x: hidden;
+                overflow: hidden;
                 min-height: 100vh;
             }
 

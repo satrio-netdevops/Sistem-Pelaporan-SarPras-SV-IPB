@@ -344,6 +344,152 @@
             color: #cbd5e1;
         }
 
+        /* 7. CUSTOM ALERT MODAL */
+        .custom-alert-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .custom-alert-box {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 2rem;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+            text-align: center;
+        }
+
+        .alert-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .alert-icon {
+            font-size: 2.5rem;
+            color: #dc2626;
+        }
+
+        .alert-icon-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #fee2e2;
+            opacity: 0.3;
+            animation: ripple 2s infinite;
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        .alert-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .alert-message {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .alert-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .alert-btn {
+            padding: 0.75rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .alert-btn:active {
+            transform: translateY(0);
+        }
+
+        .alert-btn-cancel {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+
+        .alert-btn-cancel:hover {
+            background-color: #e2e8f0;
+        }
+
+        .alert-btn-confirm {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+        }
+
+        .alert-btn-confirm:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+        }
+
         /* Responsive untuk mobile */
         @media (max-width: 768px) {
             .table-controls {
@@ -456,7 +602,7 @@
                                 <td>
                                     <div class="d-flex align-items-center text-muted">
                                         <div class="bg-light rounded-circle p-2 me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                            <i class="far fa-envelope text-primary small"></i>
+                                            <i class="far fa-envelope" style="color: #3a54cbff"></i>
                                         </div>
                                         <span class="fw-medium">{{ $user->email }}</span>
                                     </div>
@@ -477,9 +623,9 @@
                                             <i class="fas fa-pen-nib"></i>
                                         </a>
 
-                                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
+                                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline delete-form">
                                             @csrf @method('DELETE')
-                                            <button class="btn-action btn-delete" title="Delete User" data-bs-toggle="tooltip">
+                                            <button type="button" class="btn-action btn-delete" title="Delete User" data-bs-toggle="tooltip" onclick="confirmDelete(this)">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -561,6 +707,82 @@
                 console.log('Show ' + this.value + ' entries');
                 // In production, this would trigger a page reload with new per_page parameter
             });
+        });
+
+        // Custom Alert untuk Konfirmasi Hapus User
+        function confirmDelete(button) {
+            // Buat overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'custom-alert-overlay';
+            
+            // Buat alert box
+            overlay.innerHTML = `
+                <div class="custom-alert-box">
+                    <div class="alert-icon-wrapper">
+                        <i class="fas fa-exclamation-triangle alert-icon"></i>
+                    </div>
+                    <h3 class="alert-title">Konfirmasi Hapus User</h3>
+                    <p class="alert-message">
+                        Apakah Anda yakin ingin menghapus user ini secara permanen? 
+                        <br><strong>Tindakan ini tidak dapat dibatalkan.</strong>
+                    </p>
+                    <div class="alert-buttons">
+                        <button class="alert-btn alert-btn-cancel" onclick="closeAlert()">
+                            <i class="fas fa-times"></i> Batal
+                        </button>
+                        <button class="alert-btn alert-btn-confirm" onclick="proceedDelete(this)">
+                            <i class="fas fa-trash-alt"></i> Hapus User
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Simpan referensi form
+            overlay.dataset.formButton = button.closest('form').id || 'temp-form-' + Date.now();
+            button.closest('form').id = overlay.dataset.formButton;
+            
+            // Tambahkan ke body
+            document.body.appendChild(overlay);
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAlert() {
+            const overlay = document.querySelector('.custom-alert-overlay');
+            if (overlay) {
+                overlay.style.animation = 'fadeOut 0.2s ease';
+                setTimeout(() => {
+                    overlay.remove();
+                    document.body.style.overflow = '';
+                }, 200);
+            }
+        }
+
+        function proceedDelete(button) {
+            const overlay = button.closest('.custom-alert-overlay');
+            const formId = overlay.dataset.formButton;
+            const form = document.getElementById(formId);
+            
+            if (form) {
+                form.submit();
+            }
+            
+            closeAlert();
+        }
+
+        // Close on overlay click
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('custom-alert-overlay')) {
+                closeAlert();
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAlert();
+            }
         });
     </script>
 </x-app-layout>
