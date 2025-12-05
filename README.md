@@ -12,7 +12,7 @@ Fitur utama termasuk **Laporan Real-time**, **Manajemen Aset**, **Permintaan Per
 -   **Database:** MySQL (LAMP)
 -   **Frontend:** Bootstrap 5 (Sass/SCSS) + Vite
 -   **Scripting:** JavaScript (ES6), jQuery
--   **PDF & Barcodes:** `barryvdh/laravel-dompdf` & `picqer/php-barcode-generator`
+-   **PDF , Excel, & ChartJS:** `barryvdh/laravel-dompdf` & `maatexcel`
 -   **Authentication:** Laravel Breeze (Customized)
 
 
@@ -27,7 +27,7 @@ Fitur utama termasuk **Laporan Real-time**, **Manajemen Aset**, **Permintaan Per
 
 ```bash
 git clone [repository_url]
-cd inventory_system
+cd sarpras
 composer install
 npm install
 ```
@@ -46,6 +46,7 @@ php artisan migrate:fresh --seed
 ```
 
 _(password default Admin: `admin@ipb.ac.id` / `password123`)_.
+_(password default User: `kelompok2@ipb.ac.id` / `password123`)_.
 
 **Step 5: Link Storage**
 
