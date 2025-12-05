@@ -17,7 +17,6 @@
 <body>
     <h3>Laporan Masuk</h3>
     <p class="small">Dicetak: {{ \Carbon\Carbon::now()->setTimezone('Asia/Jakarta')->format('d/m/Y H:i') }}</p>
-
     <table>
         <thead>
             <tr>

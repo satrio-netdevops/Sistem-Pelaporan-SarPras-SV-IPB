@@ -182,7 +182,22 @@
         .btn-action-danger { background-color: #fef2f2; color: #dc2626; }
         .btn-action-danger:hover { background-color: #dc2626; color: white; }
 
+        /* SweetAlert Customization Override */
+        .swal2-popup {
+            font-family: 'Poppins', sans-serif !important;
+            border-radius: 1rem !important;
+        }
+
+        /* 6. FIX LAYOUT SHIFT (GESER) SAAT POPUP MUNCUL */
+        /* Memaksa scrollbar tetap muncul agar layout tidak 'melompat' ke kanan */
+        body.swal2-shown {
+            overflow-y: scroll !important; 
+            padding-right: 0 !important;
+        }
     </style>
+
+    <!-- LOAD SWEETALERT CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <div class="container py-5">
         
@@ -305,19 +320,20 @@
                                                 <button class="btn-action btn-action-danger" title="Tolak"><i class="fas fa-times"></i></button>
                                             </form>
                                         @elseif($report->status == 'approved')
-   <button type="button" 
-        class="btn-action btn-action-magenta btn-complete-trigger" 
-        title="Selesai & Verifikasi"
-        data-bs-toggle="modal" 
-        data-bs-target="#completionModal"
-        data-url="{{ route('admin.reports.complete', $report->id) }}"
-        data-object="{{ $report->object_name }}">
-    <i class="fas fa-check-double"></i>
-</button>
-@endif
-                                        <form action="{{ route('admin.reports.destroy', $report->id) }}" method="POST" onsubmit="return confirm('Hapus permanen?')">
+                                            <button type="button" 
+                                                    class="btn-action btn-action-magenta btn-complete-trigger" 
+                                                    title="Selesai & Verifikasi"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#completionModal"
+                                                    data-url="{{ route('admin.reports.complete', $report->id) }}"
+                                                    data-object="{{ $report->object_name }}">
+                                                <i class="fas fa-check-double"></i>
+                                            </button>
+                                        @endif
+                                        
+                                        <form action="{{ route('admin.reports.destroy', $report->id) }}" method="POST" class="form-delete">
                                             @csrf @method('DELETE')
-                                            <button class="btn-action text-secondary bg-light" title="Hapus"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="submit" class="btn-action text-secondary bg-light" title="Hapus"><i class="fas fa-trash-alt"></i></button>
                                         </form>
                                     </div>
                                 </td>
@@ -413,11 +429,13 @@
             
             // 1. Logic Modal Gambar
             var imageModal = document.getElementById('imageModal');
-            imageModal.addEventListener('show.bs.modal', function (event) {
-                var button = event.relatedTarget;
-                var imageUrl = button.getAttribute('data-image');
-                document.getElementById('modalImageInfo').src = imageUrl;
-            });
+            if(imageModal){
+                imageModal.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget;
+                    var imageUrl = button.getAttribute('data-image');
+                    document.getElementById('modalImageInfo').src = imageUrl;
+                });
+            }
 
             // 2. Logic Filtering & Searching
             const searchInput = document.getElementById('searchInput');
@@ -431,14 +449,9 @@
                 let visibleCount = 0;
 
                 tableRows.forEach(row => {
-                    // Ambil data dari attribute
                     const status = row.getAttribute('data-status');
                     const searchText = row.getAttribute('data-search');
-
-                    // Cek apakah Status sesuai (atau 'all')
                     const matchesStatus = (filterValue === 'all') || (status === filterValue);
-                    
-                    // Cek apakah Text sesuai pencarian
                     const matchesSearch = searchText.includes(searchTerm);
 
                     if (matchesStatus && matchesSearch) {
@@ -449,7 +462,6 @@
                     }
                 });
 
-                // Tampilkan pesan jika tidak ada hasil
                 if (visibleCount === 0) {
                     if(noResultRow) noResultRow.style.display = '';
                 } else {
@@ -457,29 +469,73 @@
                 }
             }
 
-            // Event Listeners
-            searchInput.addEventListener('input', filterTable);
-            statusFilter.addEventListener('change', filterTable);
+            if(searchInput) searchInput.addEventListener('input', filterTable);
+            if(statusFilter) statusFilter.addEventListener('change', filterTable);
+
+            // 3. LOGIC SWEETALERT 2 UNTUK DELETE
+            const deleteForms = document.querySelectorAll('.form-delete');
+            
+            deleteForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    // Mencegah submit default
+                    event.preventDefault();
+
+                    const currentForm = this;
+
+                    Swal.fire({
+                        title: 'Hapus Laporan?',
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ef4444',
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal',
+                        
+                        // FIX PERGESERAN LAYOUT
+                        // Kita matikan padding otomatis SweetAlert
+                        // TAPI kita paksa scrollbar tetap ada lewat CSS (lihat style di atas)
+                        scrollbarPadding: false,
+                        heightAuto: false,
+
+                        customClass: {
+                            popup: 'rounded-4 shadow-lg',
+                            confirmButton: 'btn btn-danger px-4 rounded-3',
+                            cancelButton: 'btn btn-secondary px-4 rounded-3 ms-2'
+                        },
+                        buttonsStyling: false 
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Memproses...',
+                                text: 'Mohon tunggu sebentar',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                            // Submit form manual
+                            currentForm.submit();
+                        }
+                    });
+                });
+            });
         });
 
-var completionModal = document.getElementById('completionModal');
-    if (completionModal) {
-        completionModal.addEventListener('show.bs.modal', function (event) {
-            // Tombol yang diklik
-            var button = event.relatedTarget;
-            
-            // Ambil data dari atribut data-*
-            var actionUrl = button.getAttribute('data-url');
-            var objectName = button.getAttribute('data-object');
-            
-            // Update isi Modal
-            var form = document.getElementById('completionForm');
-            var objectNameText = document.getElementById('modalObjectName');
-            
-            form.action = actionUrl;
-            objectNameText.textContent = objectName;
-        });
-    }
-        
+        // 4. Logic Modal Penyelesaian (Completion Modal)
+        var completionModal = document.getElementById('completionModal');
+        if (completionModal) {
+            completionModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var actionUrl = button.getAttribute('data-url');
+                var objectName = button.getAttribute('data-object');
+                
+                var form = document.getElementById('completionForm');
+                var objectNameText = document.getElementById('modalObjectName');
+                
+                if(form) form.action = actionUrl;
+                if(objectNameText) objectNameText.textContent = objectName;
+            });
+        }
     </script>
 </x-app-layout>

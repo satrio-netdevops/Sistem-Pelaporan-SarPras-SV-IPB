@@ -3,6 +3,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- LOAD BOOTSTRAP BUNDLE (Termasuk Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- LOAD SWEETALERT CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         :root {
             /* Palette Warna (Konsisten) */
@@ -369,6 +375,19 @@
             }
         }
 
+        /* --- SWEETALERT CUSTOM STYLES --- */
+        .swal2-popup {
+            font-family: 'Poppins', sans-serif !important;
+            border-radius: 1rem !important;
+        }
+
+        /* FIX LAYOUT SHIFT (GESER) SAAT POPUP MUNCUL */
+        /* Memaksa scrollbar tetap muncul agar layout tidak 'melompat' ke kanan */
+        body.swal2-shown {
+            overflow-y: scroll !important; 
+            padding-right: 0 !important;
+        }
+
     </style>
 
     <div class="container py-5">
@@ -481,9 +500,10 @@
                                             <i class="fas fa-pen-nib"></i>
                                         </a>
 
-                                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
+                                        <!-- Form Delete Updated for SweetAlert -->
+                                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline form-delete">
                                             @csrf @method('DELETE')
-                                            <button class="btn-action btn-delete" title="Delete User" data-bs-toggle="tooltip">
+                                            <button type="submit" class="btn-action btn-delete" title="Delete User" data-bs-toggle="tooltip">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -546,24 +566,77 @@
             const searchInput = document.getElementById('search');
             const tableRows = document.querySelectorAll('.custom-table tbody tr');
 
-            searchInput.addEventListener('keyup', function() {
-                const searchTerm = this.value.toLowerCase();
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function() {
+                    const searchTerm = this.value.toLowerCase();
 
-                tableRows.forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    if (text.includes(searchTerm)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
+                    tableRows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        if (text.includes(searchTerm)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
                 });
-            });
+            }
 
-            // Entries selector (demo - would need backend implementation)
+            // Entries selector (demo)
             const entriesSelect = document.getElementById('entries');
-            entriesSelect.addEventListener('change', function() {
-                console.log('Show ' + this.value + ' entries');
-                // In production, this would trigger a page reload with new per_page parameter
+            if (entriesSelect) {
+                entriesSelect.addEventListener('change', function() {
+                    console.log('Show ' + this.value + ' entries');
+                });
+            }
+
+            // --- LOGIC SWEETALERT 2 UNTUK DELETE ---
+            const deleteForms = document.querySelectorAll('.form-delete');
+            
+            deleteForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    // Mencegah submit default browser
+                    event.preventDefault();
+
+                    const currentForm = this;
+
+                    Swal.fire({
+                        title: 'Hapus User?',
+                        text: "Data user ini akan dihapus permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ef4444',
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal',
+                        
+                        // FIX PERGESERAN LAYOUT
+                        // Kita matikan padding otomatis SweetAlert
+                        // TAPI kita paksa scrollbar tetap ada lewat CSS (lihat style di atas: body.swal2-shown)
+                        scrollbarPadding: false,
+                        heightAuto: false,
+
+                        customClass: {
+                            popup: 'rounded-4 shadow-lg',
+                            confirmButton: 'btn btn-danger px-4 rounded-3',
+                            cancelButton: 'btn btn-secondary px-4 rounded-3 ms-2'
+                        },
+                        buttonsStyling: false 
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Tampilkan loading saat proses hapus berjalan
+                            Swal.fire({
+                                title: 'Memproses...',
+                                text: 'Mohon tunggu sebentar',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                            // Submit form secara manual
+                            currentForm.submit();
+                        }
+                    });
+                });
             });
         });
     </script>
