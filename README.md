@@ -27,7 +27,7 @@ Fitur utama termasuk **Laporan Real-time**, **Manajemen Aset**, **Permintaan Per
 
 ```bash
 git clone [repository_url]
-cd sarpras
+cd [repository_url]
 composer install
 npm install
 ```
@@ -35,7 +35,7 @@ npm install
 **Step 3: Pengaturan Environment**
 
 1.  Salin `.env.example` menjadi `.env`.
-2.  Isi kredensial database (`DB_DATABASE=inventory_system`).
+2.  Isi kredensial database (`DB_DATABASE=sarpras`).
 3.  (Opsional) Isi kredensial Mail jika ingin mengaktifkan notifikasi email.
 
 **Step 4: Key Generation & Migration**
